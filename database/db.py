@@ -46,7 +46,7 @@ class DB:
         # Add a transaction
         self.cursor.execute("""
             INSERT INTO transactions (date, amount, category, notes)
-                VALUE (?, ?, ?, ?)
+                VALUES (?, ?, ?, ?)
         """, (date, amount, category, notes))
         self.connection.commit()
 
@@ -54,7 +54,7 @@ class DB:
         # Returns all transactions
         # SELECT returns a data set, and so we must use fetchall to return data
         self.cursor.execute("""SELECT * FROM transactions ORDER BY date DESC""")
-        self.cursor.fetchall()
+        return self.cursor.fetchall()
 
     def update_transaction(self, trans_id, date, amount, category, notes):
         # Update the transaction
@@ -64,7 +64,7 @@ class DB:
 
     def delete_transaction(self, trans_id):
         # Delete the transaction using its unique id
-        self.cursor.execute("""DELETE FROM transactions WHERE id=?""", (trans_id))
+        self.cursor.execute("""DELETE FROM transactions WHERE id=?""", (trans_id,))
         self.connection.commit()
 
     def close(self):
