@@ -1,9 +1,14 @@
+"""Main dashboard view."""
+
 import tkinter.font
 import customtkinter
 
+
 class Dashboard():
+    """Main application dashboard with navigation."""
+
     def __init__(self, root, db, app_title):
-        # Initialize the main window
+        """Initialize dashboard."""
         self.root = root
         self.db = db
         self.root.title(app_title)
@@ -13,16 +18,17 @@ class Dashboard():
         self.set_theme()
 
         # Fill the layout
-        self.fill_main()
+        self.create_widgets()
 
     def set_theme(self, mode="dark", theme="dark-blue", fg_color="#0f172a"):
-        """"Set the main theme of the Dashboard page"""
+        """"Set the main theme of the Dashboard page."""
         customtkinter.set_appearance_mode(mode)
         customtkinter.set_default_color_theme(theme)
         self.root.configure(fg_color=fg_color)
 
-    def fill_main(self):
-        """Fill the root window"""
+    def create_widgets(self):
+        """Create dashboard widgets."""
+
         # Configure rows -- control VERTICAL stretching
         # There are 4 main areas
         self.root.grid_rowconfigure(0, weight=3)    # Dashboard title area
