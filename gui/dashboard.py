@@ -56,7 +56,8 @@ class Dashboard():
                                                   fg_color="#6366f1",
                                                   border_width=0.5,
                                                   border_color="#94a3b8",
-                                                  hover_color="#818cf8"
+                                                  hover_color="#818cf8",
+                                                  command=self.open_add_transaction
                                                   )
         self.add_button.grid(row=1, column=0, pady=(10))
 
@@ -93,3 +94,7 @@ class Dashboard():
         # for font_family in available_fonts:
             # print(font_family)
 
+    def open_add_transaction(self) -> None:
+        """Open Add Transaction window/form."""
+        from gui.add_transaction import AddTransaction
+        AddTransaction(self.root, self.controller)
