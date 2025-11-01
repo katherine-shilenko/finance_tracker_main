@@ -45,9 +45,11 @@ class Dashboard():
                                                   text="ADD TRANSACTION",
                                                   font=("Segoe UI Light", 14),
                                                   width=500,
-                                                  height=60,
-                                                  fg_color="#818cf8",
-                                                  border_width=2
+                                                  height=55,
+                                                  fg_color="#6366f1",
+                                                  border_width=0.5,
+                                                  border_color="#94a3b8",
+                                                  hover_color="#818cf8"
                                                   )
         self.add_button.grid(row=1, column=0, pady=(10))
 
@@ -56,9 +58,11 @@ class Dashboard():
                                                   text="VIEW ALL TRANSACTION",
                                                   font=("Segoe UI Light", 14),
                                                   width=500,
-                                                  height=60,
-                                                  fg_color="#1e293b",
-                                                  border_width=2
+                                                  height=55,
+                                                    fg_color="#1e293b",
+                                                    border_width=0.5,
+                                                    border_color="#94a3b8",
+                                                    hover_color="#324461"
                                                   )
         self.view_all_button.grid(row=2, column=0,sticky="n")
 
