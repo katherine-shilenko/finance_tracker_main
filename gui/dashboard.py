@@ -2,15 +2,16 @@
 
 import tkinter.font
 import customtkinter
+from controller.controller import Controller
 
 
 class Dashboard():
     """Main application dashboard with navigation."""
 
-    def __init__(self, root, db, app_title):
+    def __init__(self, root: customtkinter.CTk, controller: Controller, app_title: str) -> None:
         """Initialize dashboard."""
         self.root = root
-        self.db = db
+        self.controller = Controller
         self.root.title(app_title)
         self.root.geometry("1350x700")
 
@@ -20,13 +21,13 @@ class Dashboard():
         # Fill the layout
         self.create_widgets()
 
-    def set_theme(self, mode="dark", theme="dark-blue", fg_color="#0f172a"):
-        """"Set the main theme of the Dashboard page."""
+    def set_theme(self, mode: str = "dark", theme: str = "dark-blue", fg_color: str = "#0f172a") -> None:
+        """Set the main theme of the Dashboard page."""
         customtkinter.set_appearance_mode(mode)
         customtkinter.set_default_color_theme(theme)
         self.root.configure(fg_color=fg_color)
 
-    def create_widgets(self):
+    def create_widgets(self) -> None:
         """Create dashboard widgets."""
 
         # Configure rows -- control VERTICAL stretching
