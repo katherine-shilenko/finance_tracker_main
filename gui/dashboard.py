@@ -11,7 +11,7 @@ class Dashboard():
     def __init__(self, root: customtkinter.CTk, controller: Controller, app_title: str) -> None:
         """Initialize dashboard."""
         self.root = root
-        self.controller = Controller
+        self.controller = controller
         self.root.title(app_title)
         self.root.geometry("1350x700")
 
