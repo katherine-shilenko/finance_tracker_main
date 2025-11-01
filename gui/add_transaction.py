@@ -41,6 +41,8 @@ class AddTransaction:
         date_label.pack(pady=(10,0), padx=40, fill="x")
 
         self.date_entry = customtkinter.CTkEntry(self.window,
+                                                 text_color=PRIMARY_TEXT_COLOR,
+                                                 font=("Segoe UI", 15),
                                                  width=300,
                                                  height=45,
                                                  placeholder_text="YYYY-MM-DD",
@@ -57,6 +59,8 @@ class AddTransaction:
         amount_label.pack(pady=(10,0), padx=40, fill="x")
 
         self.amount_entry = customtkinter.CTkEntry(self.window,
+                                                   text_color=PRIMARY_TEXT_COLOR,
+                                                   font=("Segoe UI", 15),
                                                    height=45,
                                                    width=300,
                                                    placeholder_text="0.00",
@@ -79,13 +83,20 @@ class AddTransaction:
             "Travel", "Personal Care", "Miscellaneous"
         ]
         self.category_entry = customtkinter.CTkComboBox(self.window,
+                                                        text_color=PRIMARY_TEXT_COLOR,
+                                                        font=("Segoe UI", 15),
+                                                        dropdown_font=("Segoe UI", 15),
                                                         button_color=SECONDARY_BG_COLOR,
-                                                        button_hover_color=PRIMARY_BG_COLOR,
+                                                        button_hover_color="#424e61",
                                                         height=45,
                                                         values=categories,
                                                         width=300,
+                                                        dropdown_hover_color="#424e61",
                                                         fg_color=SECONDARY_BG_COLOR,
-                                                        border_color=SECONDARY_BG_COLOR,)
+                                                        dropdown_fg_color=SECONDARY_BG_COLOR,
+                                                        border_color=SECONDARY_BG_COLOR,
+                                                        )
+        self.category_entry.set("Select a category")
         self.category_entry.pack(pady=5, padx=40, fill="x")
 
         # Notes field
@@ -96,6 +107,7 @@ class AddTransaction:
         notes_label.pack(pady=(10, 0), padx=40, fill="x")
 
         self.notes_entry = customtkinter.CTkTextbox(self.window,
+                                                    text_color=PRIMARY_TEXT_COLOR,
                                                     width=300,
                                                     height=100,
                                                     fg_color=SECONDARY_BG_COLOR,
@@ -107,6 +119,7 @@ class AddTransaction:
         button_frame.pack(pady=(40,20), padx=40, fill="x")
 
         save_button = (customtkinter.CTkButton(button_frame,
+                                               command=self.save,
                                                font=("Segoe UI", 15),
                                                text="SAVE",
                                                text_color=PRIMARY_TEXT_COLOR,
@@ -117,6 +130,7 @@ class AddTransaction:
                                                corner_radius=10))
         save_button.pack(side="left", padx=5)
         cancel_button = (customtkinter.CTkButton(button_frame,
+                                                 command=self.clear,
                                                  font=("Segoe UI Light", 15),
                                                  text="CANCEL",
                                                  text_color=PRIMARY_TEXT_COLOR,
@@ -126,3 +140,27 @@ class AddTransaction:
                                                  width=200,
                                                  corner_radius=10))
         cancel_button.pack(side="left", padx=5)
+
+    def save(self) -> None:
+        """Save transaction via controller."""
+        # FIXME: ADD ERROR HANDLING
+        # FIXME: ADD SUCCESS MESSAGE
+
+        # Collect data from all input fields
+        date = self.date_entry.get().strip()
+        amount = self.amount_entry.get().strip()
+        category = self.category_entry.get().strip()
+        notes = self.notes_entry.get("1.0", "end-1c").strip()
+
+        # Add Transaction
+        self.controller.add_transaction(date, amount, category, notes)
+
+        # Destroy the window
+        self.clear()
+        self.window.after(1000, self.window.destroy)
+
+    def clear(self) -> None:
+        """Clear all input fields."""
+        self.date_entry.delete(0,"end")
+        self.amount_entry.delete(0, "end")
+        self.notes_entry.delete("1.0", "end")
