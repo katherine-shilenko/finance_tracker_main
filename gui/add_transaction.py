@@ -131,7 +131,7 @@ class AddTransaction:
         save_button.pack(side="left", padx=5)
         cancel_button = (customtkinter.CTkButton(button_frame,
                                                  command=self.clear,
-                                                 font=("Segoe UI Light", 15),
+                                                 font=("Segoe UI", 15),
                                                  text="CANCEL",
                                                  text_color=PRIMARY_TEXT_COLOR,
                                                  fg_color="#424e61",
@@ -160,7 +160,5 @@ class AddTransaction:
         self.window.after(1000, self.window.destroy)
 
     def clear(self) -> None:
-        """Clear all input fields."""
-        self.date_entry.delete(0,"end")
-        self.amount_entry.delete(0, "end")
-        self.notes_entry.delete("1.0", "end")
+        """Clear all input fields and close the window."""
+        self.window.after(1000, self.window.destroy)
