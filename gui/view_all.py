@@ -8,6 +8,7 @@ PRIMARY_TEXT_COLOR = "#e2e8f0"
 SECONDARY_TEXT_COLOR = "#5d6a7d"
 SECONDARY_BG_COLOR = "#0f172a"
 PRIMARY_BG_COLOR = "#1e293b"
+APP_TITLE = "Budget Mini"
 
 
 class ViewAll():
@@ -80,7 +81,7 @@ class ViewAll():
         transactions = self.controller.get_all_transactions()
 
         # Prepare table data
-        table_headers = ["DATE", "CATEGORY", "AMOUNT", "NOTES", "ACTIONS"]
+        table_headers = ["DATE", "CATEGORY", "AMOUNT", "NOTES", "EDIT", "DELETE"]
 
         if not transactions:
             # If there are no recorded transactions, state so
@@ -89,18 +90,22 @@ class ViewAll():
             # If data is present, fill the table
             table_data = [table_headers]
 
+            # Store transaction IDs for reference
+            self.transaction_ids = []
+
             for expense in transactions:
-                # Action icons
-                actions = "✏️  🗑️"
                 # Collected data
                 trans_id, category, amount, date, notes = expense
 
-                table_data.append([date, category, amount, notes, actions])
+                # Store transaction ID
+                self.transaction_ids.append(trans_id)
+
+                table_data.append([date, category, amount, notes, "✏️", "🗑️"])
 
         # Create a CTkTable
         self.table = CTkTable(self.table_container,
                               row=len(table_data),
-                              column=5,
+                              column=6,
                               values=table_data,
                               colors=["#1e293b", "#324461"],
                               header_color="#0c1221",
@@ -112,8 +117,7 @@ class ViewAll():
                               pady=1,
                               command=self.on_row_click,
                               height=40,
-                              wraplength=250
-                              )
+                              wraplength=250)
         self.table.pack(fill="both", expand=True)
 
 
@@ -133,11 +137,22 @@ class ViewAll():
         # Refresh the table after window closes
         self.populate_table()
 
+    def on_row_click(self, cell):
+        pass
+
+    def edit_selected(self):
+        pass
+
+    def delete_selected(self):
+        pass
+
     def return_to_dashboard(self):
-        pass
+        """Return to the main dashboard window."""
+        from gui.dashboard import Dashboard
 
-    def on_row_click(self):
-        pass
+        # Clear all widgets from root
+        for widget in self.root.winfo_children():
+            widget.destroy()
 
-
-
+        # Recreate dashboard in the same root window
+        Dashboard(self.root, self.controller, APP_TITLE)
