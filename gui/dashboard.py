@@ -50,7 +50,7 @@ class Dashboard():
         # Add Transaction button
         self.add_button = customtkinter.CTkButton(self.root,
                                                   text="ADD TRANSACTION",
-                                                  font=("Segoe UI Light", 14),
+                                                  font=("Segoe UI", 14),
                                                   width=500,
                                                   height=55,
                                                   fg_color="#6366f1",
@@ -63,15 +63,15 @@ class Dashboard():
 
         # View All Transactions button
         self.view_all_button = customtkinter.CTkButton(self.root,
-                                                  text="VIEW ALL TRANSACTION",
-                                                  font=("Segoe UI Light", 14),
-                                                  width=500,
-                                                  height=55,
-                                                    fg_color="#1e293b",
-                                                    border_width=0.5,
-                                                    border_color="#94a3b8",
-                                                    hover_color="#324461"
-                                                  )
+                                                       command = self.view_all_transactions,
+                                                        text="VIEW ALL TRANSACTIONS",
+                                                        font=("Segoe UI", 14),
+                                                        width=500,
+                                                        height=55,
+                                                        fg_color="#1e293b",
+                                                        border_width=0.5,
+                                                        border_color="#94a3b8",
+                                                        hover_color="#324461")
         self.view_all_button.grid(row=2, column=0,sticky="n")
 
         # Footer - mission statement
@@ -98,3 +98,22 @@ class Dashboard():
         """Open Add Transaction window/form."""
         from gui.add_transaction import AddTransaction
         AddTransaction(self.root, self.controller)
+
+    def view_all_transactions(self) -> None:
+        """
+        Open 'View All Transactions window/form' as a new window.
+        The Dashboard window is automatically closed/destroyed.
+        """
+
+        # Clear all widgets
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        # After destruction, add a quick delay to avoid overlap in content/layout
+        self.root.after(10, self.load_view_all)
+
+    def load_view_all(self) -> None:
+        # Create ViewAll to replace the dashboard
+        from gui.view_all import ViewAll
+        ViewAll(self.root, self.controller)
+
