@@ -3,6 +3,7 @@
 import tkinter.font
 import customtkinter
 from controller.controller import Controller
+from gui.exit_button import ExitButton
 
 
 class Dashboard():
@@ -89,10 +90,9 @@ class Dashboard():
         )
         self.footer_subtitle.grid(row=3, column=0, pady=(75, 0))
 
-        # USE TO CHECK ALL AVAILABLE FONTS
-        # available_fonts = sorted(tkinter.font.families())
-        # for font_family in available_fonts:
-            # print(font_family)
+        # Add an exit program option
+        self.exit_button = ExitButton.create_button(self.root)
+        self.exit_button.place(relx=1.0, rely=1.0, x=-20, y=-20, anchor="se")
 
     def open_add_transaction(self) -> None:
         """Open Add Transaction window/form."""
