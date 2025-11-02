@@ -84,7 +84,7 @@ class ViewAll():
 
         if not transactions:
             # If there are no recorded transactions, state so
-            table_data = ["No expenses recorded"]
+            table_data = ["You have no transactions"]
         else:
             # If data is present, fill the table
             table_data = [table_headers]
@@ -118,7 +118,20 @@ class ViewAll():
 
 
     def open_add_window(self):
-        pass
+        """Open Add Transaction window/form."""
+        from gui.add_transaction import AddTransaction
+        add_window = AddTransaction(self.root, self.controller)
+
+        # Wait for the window to close before refreshing
+        self.root.wait_window(add_window.window)
+
+        # Destroy existing table if it exists to avoid data overlap after performing actions
+        if self.table:
+            self.table.destroy()
+            self.table = None
+
+        # Refresh the table after window closes
+        self.populate_table()
 
     def return_to_dashboard(self):
         pass
