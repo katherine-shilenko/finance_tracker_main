@@ -3,6 +3,7 @@
 import customtkinter
 from controller.controller import Controller
 from CTkTable import CTkTable
+from gui.exit_button import ExitButton
 
 PRIMARY_TEXT_COLOR = "#e2e8f0"
 SECONDARY_TEXT_COLOR = "#5d6a7d"
@@ -73,6 +74,10 @@ class ViewAll():
                                                text_color=PRIMARY_TEXT_COLOR
                                                )
         back_to_dash.pack(padx=250, pady=(30, 120), fill="x")
+
+        # Add an exit program option
+        self.exit_button = ExitButton.create_button(self.root)
+        self.exit_button.place(relx=1.0, rely=1.0, x=-20, y=-20, anchor="se")
 
     def populate_table(self) -> None:
         """Populate table contents."""
