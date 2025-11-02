@@ -74,8 +74,15 @@ class ViewAll():
                                                )
         back_to_dash.pack(padx=250, pady=(30, 120), fill="x")
 
-    def populate_table(self):
+    def populate_table(self) -> None:
         """Populate table contents."""
+
+        # Clear all widgets from the container before repopulating
+        for widget in self.table_container.winfo_children():
+            widget.destroy()
+
+        # Reset self.table to None for a clean state
+        self.table = None
 
         # Get all transactions
         transactions = self.controller.get_all_transactions()
@@ -99,7 +106,7 @@ class ViewAll():
 
             for expense in transactions:
                 # Collected data
-                trans_id, category, amount, date, notes = expense
+                trans_id, date, amount, category, notes = expense
 
                 # Store transaction ID
                 self.transaction_ids.append(trans_id)
@@ -125,7 +132,7 @@ class ViewAll():
             self.table.pack(fill="both", expand=True)
 
 
-    def open_add_window(self):
+    def open_add_window(self) -> None:
         """Open Add Transaction window/form."""
         from gui.add_transaction import AddTransaction
         add_window = AddTransaction(self.root, self.controller)
@@ -141,13 +148,10 @@ class ViewAll():
         # Refresh the table after window closes
         self.populate_table()
 
-    def on_row_click(self, cell):
+    def on_row_click(self, cell) -> None:
         """Handle table cell clicks."""
         row = cell["row"]
-        print(f"ROW: {row}")
         col = cell["column"]
-        print(f"Column: {col}")
-
         self.selected_row = row - 1     # -1 accounts for the header row
 
         if row == 0:  # Ignore header row
@@ -158,10 +162,9 @@ class ViewAll():
             self.delete_selected()
 
 
-    def delete_selected(self):
+    def delete_selected(self) -> None:
         """Delete selected transaction."""
         trans_id = self.transaction_ids[self.selected_row]
-        print(trans_id)
 
         # Create confirmation dialog window
         confirm_window = customtkinter.CTkToplevel(self.root)
@@ -230,10 +233,29 @@ class ViewAll():
         )
         cancel_button.pack(side="left", padx=10)
 
-    def edit_selected(self):
-        pass
+    def edit_selected(self) -> None:
+        """Open Edit Transaction window for selected item."""
+        trans_id = self.transaction_ids[self.selected_row]
 
-    def return_to_dashboard(self):
+        # Fetch full transaction data from database
+        # FIXME: Implement GET TRANSACTION BY ID in the DB/CONTROLLER
+        all_transactions = self.controller.get_all_transactions()
+        trans_data = None
+        for trans in all_transactions:
+            if trans[0] == trans_id:
+                trans_data = trans
+                break
+
+        from gui.edit_transaction import EditTransaction
+        edit_window = EditTransaction(self.root, self.controller, trans_data)
+        self.root.wait_window(edit_window.window)
+
+        # Destroy old table and refresh
+        if self.table:
+            self.table.destroy()
+        self.populate_table()
+
+    def return_to_dashboard(self) -> None:
         """Return to the main dashboard window."""
         from gui.dashboard import Dashboard
 
