@@ -17,7 +17,7 @@ class AddTransaction:
         self.window = customtkinter.CTkToplevel(parent, fg_color="#1e293b")
         self.window.title("Add Transaction")
         self.window.geometry("500x600")
-        self.window.wm_transient(parent)    # ensures that the window pops up on top of the main dashboard window
+        self.window.transient(parent)    # ensures that the window pops up on top of the main dashboard window
 
         # Add widgets to the window
         self.create_widgets()
