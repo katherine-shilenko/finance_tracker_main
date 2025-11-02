@@ -85,7 +85,11 @@ class ViewAll():
 
         if not transactions:
             # If there are no recorded transactions, state so
-            table_data = ["You have no transactions"]
+            no_transactions_label = customtkinter.CTkLabel(self.table_container,
+                                                           text="You have no recorded transactions.",
+                                                           text_color=PRIMARY_TEXT_COLOR,
+                                                           font=("Segoe UI", 15))
+            no_transactions_label.pack(pady=20)
         else:
             # If data is present, fill the table
             table_data = [table_headers]
@@ -102,8 +106,8 @@ class ViewAll():
 
                 table_data.append([date, category, amount, notes, "✏️", "🗑️"])
 
-        # Create a CTkTable
-        self.table = CTkTable(self.table_container,
+            # Create a CTkTable
+            self.table = CTkTable(self.table_container,
                               row=len(table_data),
                               column=6,
                               values=table_data,
@@ -118,7 +122,7 @@ class ViewAll():
                               command=self.on_row_click,
                               height=40,
                               wraplength=250)
-        self.table.pack(fill="both", expand=True)
+            self.table.pack(fill="both", expand=True)
 
 
     def open_add_window(self):
@@ -138,12 +142,95 @@ class ViewAll():
         self.populate_table()
 
     def on_row_click(self, cell):
-        pass
+        """Handle table cell clicks."""
+        row = cell["row"]
+        print(f"ROW: {row}")
+        col = cell["column"]
+        print(f"Column: {col}")
 
-    def edit_selected(self):
-        pass
+        self.selected_row = row - 1     # -1 accounts for the header row
+
+        if row == 0:  # Ignore header row
+            return
+        if col == 4:
+            self.edit_selected()
+        elif col == 5:
+            self.delete_selected()
+
 
     def delete_selected(self):
+        """Delete selected transaction."""
+        trans_id = self.transaction_ids[self.selected_row]
+        print(trans_id)
+
+        # Create confirmation dialog window
+        confirm_window = customtkinter.CTkToplevel(self.root)
+        confirm_window.title("Delete")
+        confirm_window.geometry("450x250")
+        confirm_window.configure(fg_color="#1e293b")
+
+        # Center the dialog
+        confirm_window.transient(self.root)     # sets root as the parent, so that the pop-up window stays on top
+        confirm_window.grab_set()               # ensures we can't interact with the parent before making a selection on the pop-up
+
+        # Window title
+        delete_label = customtkinter.CTkLabel(
+            confirm_window,
+            text="Delete Transaction?",
+            font=("Segoe UI", 28),
+            text_color=PRIMARY_TEXT_COLOR)
+        delete_label.pack(pady=(20, 20), fill="x")
+
+        # Delete message
+        delete_message = customtkinter.CTkLabel(
+            confirm_window,
+            text="Are you sure you want to delete this \ntransaction? This action cannot be undone.",
+            font=("Segoe UI", 14),
+            text_color=SECONDARY_TEXT_COLOR)
+        delete_message.pack(pady=(0, 40), fill="x")
+
+        def do_delete():
+            """Delete the transaction if the user chooses 'Yes, Delete'."""
+            self.controller.delete_transaction(trans_id)
+            confirm_window.destroy()
+            self.selected_row = None
+
+            # Destroy old table and refresh
+            if self.table:
+                self.table.destroy()
+            self.populate_table()
+
+        # Buttons frame
+        button_frame = customtkinter.CTkFrame(confirm_window, fg_color="transparent")
+        button_frame.pack(pady=(0, 20))
+
+        yes_button = customtkinter.CTkButton(
+            button_frame,
+            text="YES, DELETE",
+            command=do_delete,
+            fg_color="#f55858",
+            hover_color="#f77979",
+            width=200,
+            height=50,
+            corner_radius=10,
+            font=("Segoe UI", 15, "bold")
+        )
+        yes_button.pack(side="left", padx=10)
+
+        cancel_button = customtkinter.CTkButton(
+            button_frame,
+            text="NO, CANCEL",
+            command=confirm_window.destroy,
+            fg_color="#424e61",
+            hover_color="#5b6b85",
+            width=200,
+            height=50,
+            corner_radius=10,
+            font=("Segoe UI", 15, "bold")
+        )
+        cancel_button.pack(side="left", padx=10)
+
+    def edit_selected(self):
         pass
 
     def return_to_dashboard(self):
